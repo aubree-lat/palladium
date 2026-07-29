@@ -1,0 +1,15 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capabilities for Tauricord's own local windows (splash and first-run setup).",
+  "windows": ["splash", "setup"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-close",
+    "core:window:allow-minimize",
+    "opener:default",
+    "allow-tauricord-finish-setup",
+    "allow-tauricord-snapshot"
+  ]
+}

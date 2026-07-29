@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tauricord-clear-mod-cache"
+description = "Enables the tauricord_clear_mod_cache command without any pre-configured scope."
+commands.allow = ["tauricord_clear_mod_cache"]
+
+[[permission]]
+identifier = "deny-tauricord-clear-mod-cache"
+description = "Denies the tauricord_clear_mod_cache command without any pre-configured scope."
+commands.deny = ["tauricord_clear_mod_cache"]

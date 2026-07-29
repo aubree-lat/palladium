@@ -1,0 +1,19 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "discord-settings",
+  "description": "Lets the settings panel injected into Discord talk to Tauricord. Scoped to Discord's own origins so no other site can reach these commands, and granted no core: or plugin permissions at all — only Tauricord's own config commands. Notably absent: tauricord_finish_setup, which belongs to the first-run window.",
+  "windows": ["main"],
+  "local": false,
+  "remote": {
+    "urls": [
+      "https://discord.com/*",
+      "https://*.discord.com/*"
+    ]
+  },
+  "permissions": [
+    "allow-tauricord-snapshot",
+    "allow-tauricord-update-config",
+    "allow-tauricord-clear-mod-cache",
+    "allow-tauricord-relaunch"
+  ]
+}

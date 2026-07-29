@@ -1,0 +1,59 @@
+[package]
+name = "tauricord"
+version = "0.1.0"
+description = "A Tauri-based Discord client with Vencord/Equicord and arRPC support"
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "tauricord_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# `devtools` keeps the web inspector available in release builds too — this is a
+# client-mod host, so being able to inspect the page is a feature, not a debug aid.
+tauri = { version = "2", features = ["tray-icon", "image-png", "devtools"] }
+tauri-plugin-opener = "2"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+tokio = { version = "1", features = [
+    "rt-multi-thread",
+    "net",
+    "io-util",
+    "sync",
+    "time",
+    "macros",
+] }
+tokio-tungstenite = "0.24"
+futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+
+reqwest = { version = "0.12", default-features = false, features = [
+    "json",
+    "rustls-tls",
+    "stream",
+] }
+
+anyhow = "1"
+thiserror = "2"
+dirs = "5"
+log = "0.4"
+env_logger = "0.11"
+
+# Reaching the underlying WebKitWebView so media/WebRTC can be switched on.
+# Must track the version Tauri itself links against or the types will not match.
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = { version = "2", features = ["v2_40"] }
+# For the native file chooser that WebKit asks us to present on upload.
+gtk = "0.18"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

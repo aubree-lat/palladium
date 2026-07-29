@@ -1,0 +1,17 @@
+{
+  "name": "tauricord",
+  "version": "0.1.0",
+  "description": "A Tauri-based Discord client with Vencord/Equicord and arRPC support",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "setup:windows": "bash scripts/setup-windows-cross.sh",
+    "build:windows": "bash scripts/build-windows.sh",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4"
+  }
+}

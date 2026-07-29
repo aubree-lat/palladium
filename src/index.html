@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tauricord</title>
+    <style>
+      :root {
+        --accent: #d8b4fe;
+        --accent-dim: rgba(192, 132, 252, 0.8);
+        --border: rgba(160, 80, 220, 0.35);
+        --danger: #ff6b6b;
+        --sans: Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        padding: 2rem;
+        background: linear-gradient(160deg, #000000, #1a0030, #0d001a, #2a0050, #000000);
+        background-size: 400% 400%;
+        animation: gradientShift 8s ease infinite;
+        color: var(--accent);
+        font-family: var(--sans);
+        text-align: center;
+        user-select: none;
+        cursor: default;
+      }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes barSlide {
+        0% { width: 8%; }
+        50% { width: 76%; }
+        100% { width: 100%; }
+      }
+
+      .mark {
+        width: 60px;
+        height: 60px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+
+      h1 {
+        font-size: 2.1rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      #status {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: var(--accent);
+        max-width: 40ch;
+      }
+
+      #status.error {
+        color: var(--danger);
+        max-width: 52ch;
+        font-size: 0.75rem;
+        text-align: left;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 9rem;
+        overflow-y: auto;
+        border-left: 2px solid var(--danger);
+        padding-left: 0.75rem;
+      }
+
+      #bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        width: 0;
+        background: linear-gradient(90deg, #050505, #7a7a7a, var(--accent));
+        animation: barSlide 2.4s ease-in-out infinite;
+      }
+
+      #bar.hidden {
+        display: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        body { animation: none; }
+        #bar { animation: none; width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mark" aria-hidden="true">T</div>
+    <h1>Tauricord</h1>
+    <p id="status">fetching client mod...</p>
+    <div id="bar"></div>
+
+    <script>
+      window.tauricordError = function (message) {
+        const status = document.getElementById("status");
+        status.textContent = message;
+        status.classList.add("error");
+        document.getElementById("bar").classList.add("hidden");
+      };
+    </script>
+  </body>
+</html>

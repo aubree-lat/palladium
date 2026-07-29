@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Tauricord</title>
+    <style>
+      :root {
+        --bg: #1a1b1e;
+        --surface: #232428;
+        --surface-hi: #2b2d31;
+        --fg: #e6e7ea;
+        --muted: #8b8d94;
+        --accent: #5865f2;
+        --border: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        padding: 2.5rem 2.25rem;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        user-select: none;
+        cursor: default;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+      }
+
+      .mark {
+        width: 2.75rem;
+        height: 2.75rem;
+        flex: 0 0 auto;
+        border-radius: 13px;
+        background: linear-gradient(140deg, var(--accent), #7d3fd4);
+        display: grid;
+        place-items: center;
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 650;
+        letter-spacing: -0.015em;
+      }
+
+      .lede {
+        font-size: 0.875rem;
+        color: var(--muted);
+        margin-top: 0.15rem;
+      }
+
+      h2 {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.6rem;
+      }
+
+      .choices {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .choice {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        text-align: left;
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background: var(--surface);
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        transition: background 0.12s ease, border-color 0.12s ease;
+      }
+
+      .choice:hover {
+        background: var(--surface-hi);
+      }
+
+      .choice[aria-checked="true"] {
+        border-color: var(--accent);
+      }
+
+      .dot {
+        margin-top: 0.2rem;
+        width: 1.05rem;
+        height: 1.05rem;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        border: 2px solid #6b6d75;
+        display: grid;
+        place-items: center;
+      }
+
+      .choice[aria-checked="true"] .dot {
+        border-color: var(--accent);
+      }
+
+      .choice[aria-checked="true"] .dot::after {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      .name {
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .tag {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-left: 0.45rem;
+      }
+
+      .desc {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+        line-height: 1.45;
+      }
+
+      .rowline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.95rem 1rem;
+        border-radius: 10px;
+        background: var(--surface);
+      }
+
+      .switch {
+        position: relative;
+        flex: 0 0 auto;
+        width: 2.5rem;
+        height: 1.5rem;
+        border: none;
+        border-radius: 999px;
+        background: #4a4c53;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+
+      .switch[aria-checked="true"] {
+        background: var(--accent);
+      }
+
+      .switch::after {
+        content: "";
+        position: absolute;
+        top: 0.25rem;
+        left: 0.25rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.15s ease;
+      }
+
+      .switch[aria-checked="true"]::after {
+        transform: translateX(1rem);
+      }
+
+      footer {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-top: 0.5rem;
+      }
+
+      .hint {
+        font-size: 0.75rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .cta {
+        flex: 0 0 auto;
+        border: none;
+        border-radius: 8px;
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        background: var(--accent);
+        cursor: pointer;
+      }
+
+      .cta:hover {
+        filter: brightness(1.1);
+      }
+
+      .cta:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .error {
+        font-size: 0.8rem;
+        color: #ed4245;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="mark" aria-hidden="true">T</div>
+      <div>
+        <h1>Welcome to Tauricord</h1>
+        <p class="lede">Discord on the system webview, without bundling Electron.</p>
+      </div>
+    </header>
+
+    <section>
+      <h2>Choose a client mod</h2>
+      <div class="choices" role="radiogroup" aria-label="Client mod">
+        <button class="choice" role="radio" data-mod="equicord" aria-checked="true">
+          <span class="dot" aria-hidden="true"></span>
+          <span>
+            <span class="name">Equicord<span class="tag">Recommended</span></span>
+            <span class="desc">
+              A Vencord fork with a much larger plugin catalogue. Pick this if you
+              want the most features out of the box.
+            </span>
+          </span>
+        </button>
+
+        <button class="choice" role="radio" data-mod="vencord" aria-checked="false">
+          <span class="dot" aria-hidden="true"></span>
+          <span>
+            <span class="name">Vencord</span>
+            <span class="desc">
+              The original client mod. Smaller, more conservative, and the
+              upstream that Equicord tracks.
+            </span>
+          </span>
+        </button>
+
+        <button class="choice" role="radio" data-mod="none" aria-checked="false">
+          <span class="dot" aria-hidden="true"></span>
+          <span>
+            <span class="name">Vanilla</span>
+            <span class="desc">
+              No client mod at all — plain Discord in a Tauri window. Tauricord's
+              own settings panel is still available.
+            </span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rich Presence</h2>
+      <div class="rowline">
+        <div>
+          <div class="name">Enable arRPC</div>
+          <div class="desc">
+            Lets games set your Discord status, the way the official client does.
+            Runs entirely inside Tauricord.
+          </div>
+        </div>
+        <button class="switch" id="arrpc" role="switch" aria-checked="true" aria-label="Enable arRPC"></button>
+      </div>
+    </section>
+
+    <footer>
+      <p class="hint" id="hint">
+        You can change any of this later from Discord&nbsp;&rsaquo;
+        Settings&nbsp;&rsaquo; Tauricord.
+      </p>
+      <button class="cta" id="go">Get started</button>
+    </footer>
+
+    <script>
+      const invoke = (cmd, args) => {
+        const g = window.__TAURI__;
+        const fn = (g && g.core && g.core.invoke) || (g && g.invoke);
+        if (!fn) return Promise.reject(new Error("Tauri IPC unavailable"));
+        return fn(cmd, args || {});
+      };
+
+      let selected = "equicord";
+      const choices = [...document.querySelectorAll(".choice")];
+      choices.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          choices.forEach((b) => b.setAttribute("aria-checked", "false"));
+          btn.setAttribute("aria-checked", "true");
+          selected = btn.dataset.mod;
+        });
+      });
+
+      const arrpc = document.getElementById("arrpc");
+      arrpc.addEventListener("click", () => {
+        arrpc.setAttribute(
+          "aria-checked",
+          arrpc.getAttribute("aria-checked") === "true" ? "false" : "true"
+        );
+      });
+
+      const go = document.getElementById("go");
+      const hint = document.getElementById("hint");
+      go.addEventListener("click", () => {
+        go.disabled = true;
+        go.textContent = "Setting up…";
+        invoke("tauricord_finish_setup", {
+          patch: {
+            client_mod: selected,
+            arrpc_enabled: arrpc.getAttribute("aria-checked") === "true",
+          },
+        }).catch((e) => {
+          go.disabled = false;
+          go.textContent = "Get started";
+          hint.className = "error";
+          hint.textContent = "Could not save your choice: " + e;
+        });
+      });
+    </script>
+  </body>
+</html>
