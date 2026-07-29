@@ -5,3 +5,6 @@ hi, this is a tauri (no not electron) client for discord thats barely fucking wo
 - proper settings
 - stuff
   
+BEWARE!!!
+most of this is ai gen'd
+i cant code rust for SHIT
