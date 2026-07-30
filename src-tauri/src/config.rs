@@ -53,6 +53,42 @@ pub struct Config {
     pub always_update_mod: bool,
     pub minimize_to_tray: bool,
     pub discord_branch: DiscordBranch,
+    pub linux_backend: LinuxBackend,
+    pub theme: Theme,
+    pub theme_discord: bool,
+    pub zoom: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
+pub enum Theme {
+    #[default]
+    Palladium,
+    Oxygen,
+    Hydrogen,
+    Plutonium,
+    Uranium,
+    Iron,
+    Gallium,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
+pub enum LinuxBackend {
+    #[default]
+    Auto,
+    Wayland,
+    X11,
+}
+
+impl LinuxBackend {
+    pub fn gdk_value(self) -> Option<&'static str> {
+        match self {
+            LinuxBackend::Auto => None,
+            LinuxBackend::Wayland => Some("wayland"),
+            LinuxBackend::X11 => Some("x11"),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
@@ -83,22 +119,63 @@ impl Default for Config {
             always_update_mod: false,
             minimize_to_tray: true,
             discord_branch: DiscordBranch::Stable,
+            linux_backend: LinuxBackend::Auto,
+            theme: Theme::Palladium,
+            theme_discord: false,
+            zoom: 1.0,
         }
     }
 }
 
 impl Config {
     pub fn start_url(&self) -> String {
-        std::env::var("TAURICORD_URL")
+        std::env::var("PALLADIUM_URL")
             .ok()
             .filter(|u| !u.trim().is_empty())
             .unwrap_or_else(|| self.discord_branch.url().to_string())
     }
 
+    pub fn migrate_legacy_data() {
+        let Some(share) = dirs::data_dir() else {
+            return;
+        };
+
+        for (old, new) in [
+            ("dev.tauricord.app", "dev.palladium.app"),
+            ("tauricord", "palladium"),
+        ] {
+            let legacy = share.join(old);
+            let target = share.join(new);
+            if !legacy.is_dir() {
+                continue;
+            }
+            let target_empty = std::fs::read_dir(&target)
+                .map(|mut d| d.next().is_none())
+                .unwrap_or(true);
+            if !target_empty {
+                continue;
+            }
+            let _ = std::fs::remove_dir_all(&target);
+            match std::fs::rename(&legacy, &target) {
+                Ok(()) => log::info!("migrated {} to {}", legacy.display(), target.display()),
+                Err(e) => log::warn!("could not migrate {}: {e}", legacy.display()),
+            }
+        }
+    }
+
     pub fn dir() -> Result<PathBuf> {
-        let dir = dirs::config_dir()
-            .context("could not determine the platform config directory")?
-            .join("tauricord");
+        let base = dirs::config_dir()
+            .context("could not determine the platform config directory")?;
+        let dir = base.join("palladium");
+
+        let legacy = base.join("tauricord");
+        if !dir.exists() && legacy.is_dir() {
+            match fs::rename(&legacy, &dir) {
+                Ok(()) => log::info!("migrated settings from {}", legacy.display()),
+                Err(e) => log::warn!("could not migrate {}: {e}", legacy.display()),
+            }
+        }
+
         fs::create_dir_all(&dir)
             .with_context(|| format!("creating config dir {}", dir.display()))?;
         Ok(dir)

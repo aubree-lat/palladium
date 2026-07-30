@@ -1,15 +1,24 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Capabilities for Tauricord's own local windows (splash and first-run setup).",
-  "windows": ["splash", "setup"],
+  "description": "Capabilities for Palladium's own local windows (splash and first-run setup).",
+  "windows": [
+    "splash",
+    "setup",
+    "settings"
+  ],
   "permissions": [
     "core:default",
     "core:window:allow-start-dragging",
     "core:window:allow-close",
     "core:window:allow-minimize",
     "opener:default",
-    "allow-tauricord-finish-setup",
-    "allow-tauricord-snapshot"
+    "allow-palladium-finish-setup",
+    "allow-palladium-snapshot",
+    "allow-palladium-import-settings",
+    "allow-palladium-open-settings",
+    "allow-palladium-update-config",
+    "allow-palladium-clear-mod-cache",
+    "allow-palladium-relaunch"
   ]
 }

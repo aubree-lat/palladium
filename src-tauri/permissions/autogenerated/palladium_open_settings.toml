@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-palladium-open-settings"
+description = "Enables the palladium_open_settings command without any pre-configured scope."
+commands.allow = ["palladium_open_settings"]
+
+[[permission]]
+identifier = "deny-palladium-open-settings"
+description = "Denies the palladium_open_settings command without any pre-configured scope."
+commands.deny = ["palladium_open_settings"]

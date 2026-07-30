@@ -17,4 +17,4 @@ npx tauri build --runner cargo-xwin --target "$TARGET" --bundles nsis "$@"
 
 out="src-tauri/target/${TARGET}/release"
 printf '\n\033[1;35m==>\033[0m Artifacts:\n'
-ls -lh "${out}/tauricord.exe" "${out}/bundle/nsis/"*.exe 2>/dev/null || true
+ls -lh "${out}/palladium.exe" "${out}/bundle/nsis/"*.exe 2>/dev/null || true

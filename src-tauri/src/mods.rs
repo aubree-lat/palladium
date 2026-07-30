@@ -24,7 +24,7 @@ pub struct ModBundle {
 pub fn cache_dir(client_mod: ClientMod) -> Result<PathBuf> {
     let dir = dirs::data_dir()
         .context("could not determine the platform data directory")?
-        .join("tauricord")
+        .join("palladium")
         .join("mods")
         .join(client_mod.slug());
     fs::create_dir_all(&dir).with_context(|| format!("creating cache dir {}", dir.display()))?;
@@ -61,7 +61,7 @@ pub async fn fetch(client_mod: ClientMod, force: bool) -> Result<Option<ModBundl
     let mut etags = load_etags(client_mod);
 
     let client = reqwest::Client::builder()
-        .user_agent(concat!("Tauricord/", env!("CARGO_PKG_VERSION")))
+        .user_agent(concat!("Palladium/", env!("CARGO_PKG_VERSION")))
         .timeout(Duration::from_secs(60))
         .build()
         .context("building HTTP client")?;

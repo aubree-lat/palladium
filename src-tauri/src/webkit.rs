@@ -8,7 +8,8 @@ mod imp {
     use webkit2gtk::glib::prelude::*;
     use webkit2gtk::glib::translate::ToGlibPtr;
     use webkit2gtk::{
-        FileChooserRequestExt, PermissionRequestExt, SettingsExt, WebViewExt,
+        FileChooserRequestExt, NotificationExt, PermissionRequestExt, SettingsExt, URIRequestExt,
+        URIResponseExt, WebContextExt, WebResourceExt, WebViewExt,
     };
 
     mod ffi {
@@ -99,6 +100,25 @@ mod imp {
         changed
     }
 
+    fn spell_check_languages() -> Vec<String> {
+        let raw = std::env::var("LC_MESSAGES")
+            .or_else(|_| std::env::var("LANG"))
+            .unwrap_or_else(|_| "en_US".to_string());
+        let lang = raw
+            .split('.')
+            .next()
+            .unwrap_or("en_US")
+            .split('@')
+            .next()
+            .unwrap_or("en_US")
+            .to_string();
+        if lang.is_empty() || lang == "C" || lang == "POSIX" {
+            vec!["en_US".to_string()]
+        } else {
+            vec![lang]
+        }
+    }
+
     pub fn tune(window: &tauri::WebviewWindow) {
         let result = window.with_webview(|platform| {
             let webview = platform.inner();
@@ -110,6 +130,11 @@ mod imp {
                     settings.set_enable_mediasource(true);
                     settings.set_enable_media_capabilities(true);
                     settings.set_enable_encrypted_media(true);
+
+                    if std::env::var_os("PALLADIUM_CONSOLE").is_some() {
+                        settings.set_enable_write_console_messages_to_stdout(true);
+                        log::info!("page console output enabled");
+                    }
 
                     let changed = enable_webrtc_features(&settings);
 
@@ -123,6 +148,65 @@ mod imp {
                 }
                 None => log::warn!("could not reach WebKit settings; voice will not work"),
             }
+
+            if let Some(context) = WebViewExt::context(&webview) {
+                let langs = spell_check_languages();
+                let refs: Vec<&str> = langs.iter().map(String::as_str).collect();
+                context.set_spell_checking_languages(&refs);
+                context.set_spell_checking_enabled(true);
+                log::info!("spell checking enabled for {langs:?}");
+            }
+
+            if std::env::var_os("PALLADIUM_NETLOG").is_some() {
+                log::info!("network request logging enabled");
+                webview.connect_resource_load_started(|_, resource, request| {
+                    let uri = request.uri().map(|u| u.to_string()).unwrap_or_default();
+
+                    let finished_uri = uri.clone();
+                    resource.connect_finished(move |res| {
+                        let status = res
+                            .response()
+                            .map(|r| r.status_code())
+                            .unwrap_or(0);
+                        if status == 0 || status >= 400 {
+                            log::warn!("[net] {status} {finished_uri}");
+                        } else {
+                            log::debug!("[net] {status} {finished_uri}");
+                        }
+                    });
+
+                    resource.connect_failed(move |_, error| {
+                        log::warn!("[net] FAILED {uri} :: {error}");
+                    });
+                });
+            }
+
+            webview.connect_show_notification(|_, notification| {
+                let title = notification
+                    .title()
+                    .map(|s| s.to_string())
+                    .unwrap_or_else(|| "Discord".to_string());
+                let body = notification
+                    .body()
+                    .map(|s| s.to_string())
+                    .unwrap_or_default();
+
+                log::debug!("notification: {title}");
+
+                std::thread::spawn(move || {
+                    if let Err(e) = notify_rust::Notification::new()
+                        .appname("Palladium")
+                        .summary(&title)
+                        .body(&body)
+                        .icon("palladium")
+                        .show()
+                    {
+                        log::warn!("could not show notification: {e}");
+                    }
+                });
+
+                true
+            });
 
             webview.connect_permission_request(|_, request| {
                 let kind = request.type_().name();

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>palladium settings</title>
+    <link rel="stylesheet" href="theme.css" />
+    <style>
+      body {
+        padding: 2rem 2rem 3rem;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      section {
+        margin-bottom: 1.8rem;
+      }
+
+      .version {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img class="logo" src="logo.png" alt="" />
+      <div>
+        <h1>palladium</h1>
+        <div class="version" id="version">loading...</div>
+      </div>
+    </header>
+
+    <section>
+      <h2>client mod</h2>
+      <div class="choices" role="radiogroup" aria-label="client mod" id="mods"></div>
+      <p class="note" style="margin-top: 0.7rem">
+        changing this rebuilds the window, since the mod has to be injected before
+        discord starts loading
+      </p>
+    </section>
+
+    <section>
+      <h2>theme</h2>
+      <div class="swatches" role="radiogroup" aria-label="theme" id="themes"></div>
+      <div class="card" style="margin-top: 0.7rem">
+        <div class="row">
+          <div>
+            <div class="name">apply to discord</div>
+            <div class="desc">
+              restyles discord itself to match, by overriding its colour tokens.
+              works best with a client mod loaded, and applies straight away
+            </div>
+          </div>
+          <button class="switch" id="theme-discord" role="switch" aria-checked="false"></button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>import</h2>
+      <div class="card" id="imports"></div>
+      <p class="note" style="margin-top: 0.7rem" id="import-note">
+        copies plugins, themes and quickcss across, plus branch and tray settings
+      </p>
+    </section>
+
+    <section>
+      <h2>rich presence</h2>
+      <div class="card">
+        <div class="row">
+          <div>
+            <div class="name">arrpc server</div>
+            <div class="desc">
+              lets games set your discord status. serves discord-ipc and a bridge on
+              port <span id="port">1337</span>. needs a restart to change
+            </div>
+          </div>
+          <button class="switch" id="arrpc" role="switch" aria-checked="false"></button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>client</h2>
+      <div class="card">
+        <div class="row">
+          <div>
+            <div class="name">discord branch</div>
+            <div class="desc">which flavour of discord to load</div>
+          </div>
+          <select id="branch">
+            <option value="stable">stable</option>
+            <option value="ptb">ptb</option>
+            <option value="canary">canary</option>
+          </select>
+        </div>
+        <div class="row">
+          <div>
+            <div class="name">window backend</div>
+            <div class="desc">
+              wayland is native, x11 goes through xwayland. change this if the window
+              fails to draw. needs a restart
+            </div>
+          </div>
+          <select id="backend">
+            <option value="auto">auto</option>
+            <option value="wayland">wayland</option>
+            <option value="x11">x11</option>
+          </select>
+        </div>
+        <div class="row">
+          <div>
+            <div class="name">always update the mod</div>
+            <div class="desc">re-download the client mod every launch instead of using the cache</div>
+          </div>
+          <button class="switch" id="always-update" role="switch" aria-checked="false"></button>
+        </div>
+        <div class="row">
+          <div>
+            <div class="name">minimise to tray</div>
+            <div class="desc">closing the window hides it instead of quitting</div>
+          </div>
+          <button class="switch" id="tray" role="switch" aria-checked="false"></button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>maintenance</h2>
+      <div class="actions">
+        <button class="btn" id="refetch">re-download client mod</button>
+        <button class="btn" id="restart">restart palladium</button>
+      </div>
+    </section>
+
+    <script src="settings.js"></script>
+  </body>
+</html>

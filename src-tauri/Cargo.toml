@@ -1,12 +1,12 @@
 [package]
-name = "tauricord"
+name = "palladium"
 version = "0.1.0"
 description = "A Tauri-based Discord client with Vencord/Equicord and arRPC support"
 edition = "2021"
 rust-version = "1.77"
 
 [lib]
-name = "tauricord_lib"
+name = "palladium_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
@@ -38,6 +38,12 @@ reqwest = { version = "0.12", default-features = false, features = [
     "stream",
 ] }
 
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio"] }
+http-body-util = "0.1"
+url = "2"
+rand = "0.8"
+
 anyhow = "1"
 thiserror = "2"
 dirs = "5"
@@ -48,8 +54,8 @@ env_logger = "0.11"
 # Must track the version Tauri itself links against or the types will not match.
 [target.'cfg(target_os = "linux")'.dependencies]
 webkit2gtk = { version = "2", features = ["v2_40"] }
-# For the native file chooser that WebKit asks us to present on upload.
 gtk = "0.18"
+notify-rust = "4"
 
 [profile.release]
 codegen-units = 1

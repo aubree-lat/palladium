@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-palladium-snapshot"
+description = "Enables the palladium_snapshot command without any pre-configured scope."
+commands.allow = ["palladium_snapshot"]
+
+[[permission]]
+identifier = "deny-palladium-snapshot"
+description = "Denies the palladium_snapshot command without any pre-configured scope."
+commands.deny = ["palladium_snapshot"]

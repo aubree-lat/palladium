@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-palladium-clear-mod-cache"
+description = "Enables the palladium_clear_mod_cache command without any pre-configured scope."
+commands.allow = ["palladium_clear_mod_cache"]
+
+[[permission]]
+identifier = "deny-palladium-clear-mod-cache"
+description = "Denies the palladium_clear_mod_cache command without any pre-configured scope."
+commands.deny = ["palladium_clear_mod_cache"]

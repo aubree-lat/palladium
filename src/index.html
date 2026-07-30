@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauricord</title>
+    <title>Palladium</title>
     <style>
       :root {
         --accent: #d8b4fe;
@@ -118,12 +118,12 @@
   </head>
   <body>
     <div class="mark" aria-hidden="true">T</div>
-    <h1>Tauricord</h1>
+    <h1>Palladium</h1>
     <p id="status">fetching client mod...</p>
     <div id="bar"></div>
 
     <script>
-      window.tauricordError = function (message) {
+      window.palladiumError = function (message) {
         const status = document.getElementById("status");
         status.textContent = message;
         status.classList.add("error");
