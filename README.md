@@ -1,10 +1,15 @@
-# scrapped tauri client for discord
-hi, this is a tauri (no not electron) client for discord thats barely fucking working
-## whats missing
-- webrtc/voice chat for linux webkit
-- proper settings
-- stuff
-  
-BEWARE!!!
-most of this is ai gen'd
-i cant code rust for SHIT
+# palladium, the rust based client for discord
+hi, this is palladium, a rust based client thats in heavy work in progress rn, but pull requests are available and will do WONDERS to help me out with this slop
+it's still a HEAVY wip, and it could be VERY unstable
+its literally just me
+help
+anyways
+you can ask me for more info on my discord server
+discord.gg/aubree
+
+## whats currently working so far
+- basic functionality (discord launches)
+- voice chat
+- wayland/x11 support
+- equicord/vencord 
+- untested arRPC functionality  
