@@ -9,7 +9,8 @@ anyways
 
 ## whats currently working so far
 - basic functionality (discord launches)
-- voice chat (using a custom Webkit with WebRTC enabled)
+- ~~voice chat (using a custom Webkit with WebRTC enabled)~~ (it broke again)
 - wayland/x11 support
 - equicord/vencord 
-- untested arRPC functionality  
+- arRPC functionality
+- image pasting
