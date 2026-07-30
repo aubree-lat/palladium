@@ -9,7 +9,7 @@ anyways
 
 ## whats currently working so far
 - basic functionality (discord launches)
-- voice chat
+- voice chat (using a custom Webkit with WebRTC enabled)
 - wayland/x11 support
 - equicord/vencord 
 - untested arRPC functionality  
